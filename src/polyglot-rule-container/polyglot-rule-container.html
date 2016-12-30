@@ -1,0 +1,116 @@
+<link rel="import" href="../polyglot-condition/polyglot-condition.html">
+<link rel="import" href="../polyglot-rule/polyglot-rule.html">
+<link rel="import" href="../enums/enums.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-rule-container">
+  <template>
+    <style>
+      :host {
+        color: var(--primary-text-color);
+        @apply(--paper-font-body1);
+        display: block;
+      }
+      paper-button {
+        @apply(--paper-font-button);
+        font-size: 13px;
+        margin-left: 8px;
+        height: 32px;
+      }
+    </style>
+    <div 
+        class="layout horizontal" 
+        hidden$="[[_computeHasConditions(ruleset.conditions.splices)]]">
+      <span>At all times</span>
+      <paper-button raised on-tap="_addCondition">Add conditions</paper-button>
+    </div>
+    <template is="dom-if" if="[[_computeHasConditions(ruleset.conditions.splices)]]">
+      <template is="dom-repeat" items="{{ruleset.conditions}}" as="condition">
+        <polyglot-condition 
+            group="{{condition.group}}"
+            polarity="{{condition.polarity}}"
+            predicates="{{condition.predicates}}"
+            on-add-condition="_addCondition"
+            on-remove-condition="_removeCondition">
+        </polyglot-condition>
+      </template>
+      </template>
+    <template is="dom-repeat" items="{{ruleset.rules}}" as="rule">
+      <polyglot-rule
+          context="{{rule.context}}"
+          requirement="{{rule.requirement}}"
+          is-last="[[rule.isLast]]"
+          is-only="[[rule.isOnly]]"
+          on-add-rule="_addRule"
+          on-remove-rule="_removeRule">
+      </polyglot-rule>
+    </template>
+  </template>
+  <script>
+    Polymer({
+
+      is: 'polyglot-rule-container',
+
+      observers: [
+        '_recomputeRuleProperties(ruleset.rules.splices)',
+      ],
+
+      properties: {
+        ruleset: {
+          type: Object,
+          value: () => ({
+            conditions: [],
+            rules: [{
+              context: Polyglot.RuleContext.NUCLEUS,
+              requirement: Polyglot.RuleRequirement.MUST_NOT_BE_EMPTY,
+            }],
+          }),
+        },
+      },
+
+      _computeHasConditions: function(splices) {
+        return this.ruleset.conditions.length > 0;
+      },
+
+      _recomputeRuleProperties: function(splices) {
+        for (let i = 0, n = this.ruleset.rules.length; i < n; ++i) {
+          this.set(`ruleset.rules.${i}.isLast`, i === this.ruleset.rules.length - 1);
+          this.set(`ruleset.rules.${i}.isOnly`, this.ruleset.rules.length === 1);
+        }
+      },
+
+      _addCondition: function(event) {
+        const index = event.model ? event.model.index + 1 : 0;
+        this.splice('ruleset.conditions', index, 0, {
+          group: Polyglot.Group.ANY,
+          polarity: Polyglot.Polarity.MATCHES,
+          predicates: [{
+            predicate: Polyglot.Polarity.MATCHES,
+            conjunction: Polyglot.Conjunction.AND,
+          }],
+        });
+        event.stopPropagation();
+      },
+
+      _removeCondition: function(event) {
+        this.splice('ruleset.conditions', event.model.index, 1);
+        event.stopPropagation();
+      },
+
+      _addRule: function(event) {
+        this.splice('ruleset.rules', event.model ? event.model.index + 1 : 0, 0, {
+          context: Polyglot.RuleContext.MATCHED,
+          requirement: Polyglot.RuleRequirement.MUST_CONTAIN,
+        });
+        event.stopPropagation();
+      },
+
+      _removeRule: function(event) {
+        this.splice('ruleset.rules', event.model.index, 1);
+        event.stopPropagation();
+      }
+    });
+  </script>
+</dom-module>

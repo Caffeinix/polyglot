@@ -1,0 +1,138 @@
+<link rel="import" href="../enums/enums.html">
+<link rel="import" href="../polyglot-add-remove-widget/polyglot-add-remove-widget.html">
+<link rel="import" href="../polyglot-symbol-validator/polyglot-symbol-validator.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-rule">
+  <template>
+    <style>
+      :host {
+        display: flex;
+      }
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };
+        margin-top: 16px;
+        margin-right: 8px;
+      }
+      paper-item {
+        @apply(--paper-font-menu);
+      }
+      paper-input {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };        
+        --paper-input-container-label: {
+          @apply(--paper-font-body1);
+        };        
+      }
+      polyglot-add-remove-widget {
+        margin-top: 16px;
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <paper-dropdown-menu label="Context" no-label-float>
+      <paper-listbox class="dropdown-content" selected="{{context}}">
+        <paper-item>Matched group</paper-item>
+        <paper-item>Any group</paper-item>
+        <paper-item>Onset</paper-item>
+        <paper-item>Nucleus</paper-item>
+        <paper-item>Coda</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+
+    <paper-dropdown-menu label="Requirement" no-label-float>
+      <paper-listbox class="dropdown-content" selected="{{requirement}}">
+        <paper-item>must be empty</paper-item>
+        <paper-item>must not be empty</paper-item>
+        <paper-item>must contain</paper-item>
+        <paper-item>must not contain</paper-item>
+        <paper-item>must begin with</paper-item>
+        <paper-item>must not begin with</paper-item>
+        <paper-item>must end with</paper-item>
+        <paper-item>must not end with</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+
+    <iron-meta-query key="terminalSymbols" value="{{terminalSymbols}}"></iron-meta-query>
+    <iron-meta-query key="namedSymbols" value="{{namedSymbols}}"></iron-meta-query>
+    <polyglot-symbol-validator terminal-symbols="[[terminalSymbols]]" named-symbols="[[namedSymbols]]">
+    </polyglot-symbol-validator>
+    <paper-input 
+        label="Symbol" 
+        auto-validate 
+        validator="polyglot-symbol-validator" 
+        hidden$="[[_computeSymbolFieldHidden(requirement)]]">
+    </paper-input>
+    <paper-dropdown-menu 
+        id="conjunctionDropdown" 
+        label="Conjunction" 
+        no-label-float
+        hidden$="[[isLast]]">
+      <paper-listbox class="dropdown-content" selected="{{conjunction}}">
+        <paper-item>and</paper-item>
+        <paper-item>or</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+
+    <polyglot-add-remove-widget
+        can-remove="[[!isOnly]]"
+        on-add-item="_addRule" 
+        on-remove-item="_removeRule">
+    </polyglot-add-remove-widget>    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polyglot-rule',
+
+      properties: {
+        context: {
+          type: Number,
+          value: Polyglot.RuleContext.NUCLEUS,
+        },
+        requirement: {
+          type: Number,
+          value: Polyglot.RuleRequirement.MUST_NOT_BE_EMPTY,
+        },
+        conjunction: {
+          type: Number,
+          value: Polyglot.Conjunction.AND,
+        },
+        isLast: {
+          type: Boolean,
+          value: false,
+        },
+        isOnly: {
+          type: Boolean,
+          value: false,
+        },        
+      },
+
+      _computeSymbolFieldHidden: function(requirement) {
+        return requirement === Polyglot.RuleRequirement.MUST_BE_EMPTY ||
+               requirement === Polyglot.RuleRequirement.MUST_NOT_BE_EMPTY;
+      },
+
+      _addRule: function(event) {
+        this.fire('add-rule');
+        event.stopPropagation();
+      },
+
+      _removeRule: function(event) {
+        this.fire('remove-rule');
+        event.stopPropagation();
+      },      
+    });
+  </script>
+</dom-module>

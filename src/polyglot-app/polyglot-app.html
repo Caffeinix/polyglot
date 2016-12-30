@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../polyglot-markov-chain/polyglot-markov-chain.html">
+<link rel="import" href="../polyglot-rule-container/polyglot-rule-container.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <iron-meta key="terminalSymbols" value='["a", "c", "g", "t"]'></iron-meta>
+    <iron-meta key="namedSymbols" value='["basepair"]'></iron-meta>
+    <polyglot-rule-container></polyglot-rule-container>
+    <polyglot-markov-chain id="markov"></polyglot-markov-chain>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polyglot-app',
+
+      properties: {
+      },
+
+      ready: function() {
+        
+      },
+
+    });
+  </script>
+</dom-module>

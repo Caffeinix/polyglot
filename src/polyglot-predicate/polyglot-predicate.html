@@ -1,0 +1,139 @@
+<link rel="import" href="../enums/enums.html">
+<link rel="import" href="../polyglot-add-remove-widget/polyglot-add-remove-widget.html">
+<link rel="import" href="../polyglot-symbol-validator/polyglot-symbol-validator.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-predicate">
+  <template>
+    <style>
+      :host {
+        @apply(--paper-font-subhead);
+        @apply(--layout-horizontal);
+      }
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };
+        margin-top: 20px;
+        margin-right: 8px;
+      }
+      paper-input {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };
+        --paper-input-container-label: {
+          @apply(--paper-font-body1);
+        };        
+        margin-right: 8px;
+      }
+      paper-item {
+        @apply(--paper-font-menu);
+      }
+      polyglot-add-remove-widget {
+        margin-top: 20px;
+      }
+      .inline-text {
+        margin-top: 28px;
+        margin-right: 8px;
+      }
+      #conjunctionDropdown {
+        width: 80px;
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <paper-material class="layout horizontal" elevation="0">
+      <paper-dropdown-menu label="Predicate" no-label-float>
+        <paper-listbox class="dropdown-content" selected="{{predicate}}">
+          <paper-item>is empty</paper-item>
+          <paper-item>contains one symbol</paper-item>
+          <paper-item>contains multiple symbols</paper-item>
+          <paper-item>contains specific symbol</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <iron-meta-query key="terminalSymbols" value="{{terminalSymbols}}">
+      </iron-meta-query>
+      <iron-meta-query key="namedSymbols" value="{{namedSymbols}}"></iron-meta-query>
+      <polyglot-symbol-validator 
+          terminal-symbols="[[terminalSymbols]]" 
+          named-symbols="[[namedSymbols]]">
+      </polyglot-symbol-validator>
+      <paper-input 
+          label="Symbol" 
+          hidden$="[[_computeSymbolFieldHidden(predicate)]]" 
+          auto-validate 
+          validator="polyglot-symbol-validator">
+      </paper-input>
+      <paper-dropdown-menu 
+          id="conjunctionDropdown" 
+          label="Conjunction" 
+          no-label-float
+          hidden$="[[isLast]]">
+        <paper-listbox class="dropdown-content" selected="{{conjunction}}">
+          <paper-item>and</paper-item>
+          <paper-item>or</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <polyglot-add-remove-widget
+          can-remove="[[!isOnly]]"
+          on-add-item="_addPredicate" 
+          on-remove-item="_removePredicate">
+      </polyglot-add-remove-widget>
+    </paper-material>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polyglot-predicate',
+
+      properties: {
+        predicate: {
+          type: Number,
+          value: Polyglot.Predicate.IS_EMPTY,
+        },
+
+        conjunction: {
+          type: Number,
+          value: Polyglot.Conjunction.AND,
+        },
+
+        isLast: {
+          type: Boolean,
+          value: false,
+        },
+
+        isOnly: {
+          type: Boolean,
+          value: false,
+        },
+      },
+
+      _computeSymbolFieldHidden: function(predicate) {
+        return predicate !== Polyglot.Predicate.CONTAINS_SPECIFIC_SYMBOL;
+      },
+
+      _addPredicate: function(event) {
+        this.fire('add-predicate');
+        event.stopPropagation();
+      },
+
+      _removePredicate: function(event) {
+        this.fire('remove-predicate');
+        event.stopPropagation();
+      },
+    });
+  </script>
+</dom-module>

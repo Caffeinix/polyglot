@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/iron-validator-behavior/iron-validator-behavior.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-symbol-validator">
+  <template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'polyglot-symbol-validator',
+
+      behaviors: [
+        Polymer.IronValidatorBehavior
+      ],
+
+      properties: {
+        terminalSymbols: {
+          type: Array,
+          value: function() { return []; }
+        },
+        namedSymbols: {
+          type: Array,
+          value: function() { return []; }
+        },
+      },
+
+      validate: function(values) {
+        if (typeof values === 'object') {
+          return false;
+        } else {
+          var value = Array.isArray(values) ? values.join('') : values;
+          return !!this.terminalSymbols.concat(this.namedSymbols).includes(value);
+        }
+      }
+    });
+  </script>
+</dom-module>

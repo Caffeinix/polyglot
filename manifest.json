@@ -1,0 +1,7 @@
+{
+  "name": "polyglot",
+  "short_name": "polyglot",
+  "description": "A conlang construction app",
+  "start_url": "/",
+  "display": "standalone"
+}

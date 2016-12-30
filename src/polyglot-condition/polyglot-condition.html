@@ -1,0 +1,146 @@
+<link rel="import" href="../enums/enums.html">
+<link rel="import" href="../polyglot-add-remove-widget/polyglot-add-remove-widget.html">
+<link rel="import" href="../polyglot-predicate/polyglot-predicate.html">
+<link rel="import" href="../polyglot-symbol-validator/polyglot-symbol-validator.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-condition">
+  <template>
+    <style>
+      :host {
+        color: var(--primary-text-color);
+        @apply(--paper-font-body1);
+        @apply(--layout-vertical);
+      }
+      paper-material {
+        padding: 16px 0;
+      }
+      #predicates {
+        padding: 0 24px 16px;
+      }
+      paper-item {
+        @apply(--paper-font-menu);
+      }
+      .inline-text {
+        margin-top: 9px;
+        margin-right: 8px;
+      }
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };
+        margin-right: 8px;
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <paper-material class="layout horizontal" elevation="0">
+      <span class="inline-text">If</span>
+      <paper-dropdown-menu label="Group" no-label-float>
+        <paper-listbox class="dropdown-content" selected="{{group}}">
+          <paper-item>any group</paper-item>
+          <paper-item>onset</paper-item>
+          <paper-item>nucleus</paper-item>
+          <paper-item>coda</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <paper-dropdown-menu label="Polarity" no-label-float>
+        <paper-listbox class="dropdown-content" selected="{{polarity}}">
+          <paper-item>matches the following:</paper-item>
+          <paper-item>does not match the following:</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+
+      <polyglot-add-remove-widget 
+          on-add-item="_addCondition" 
+          on-remove-item="_removeCondition">
+      </polyglot-add-remove-widget>
+    </paper-material>
+
+    <paper-material id="predicates" elevation="1">
+      <template is="dom-repeat" items="[[predicates]]">
+        <polyglot-predicate 
+            predicate="{{item.predicate}}"
+            conjunction="{{item.conjunction}}"
+            is-last="[[item.isLast]]"
+            is-only="[[item.isOnly]]"
+            on-add-predicate="_addPredicate"
+            on-remove-predicate="_removePredicate"></polyglot-predicate>      
+      </template>
+    </paper-material>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polyglot-condition',
+
+      observers: [
+        '_recomputePredicateProperties(predicates.splices)',
+      ],
+
+      properties: {
+        group: {
+          type: Number,
+          value: Polyglot.Group.ANY,
+        },
+
+        polarity: {
+          type: Number,
+          value: Polyglot.Polarity.MATCHES,
+        },
+
+        predicates: {
+          type: Array,
+          value: function() { 
+            return [{
+              predicate: Polyglot.Predicate.IS_EMPTY,
+              conjunction: Polyglot.Conjunction.AND,
+              isLast: true,
+              isOnly: true,
+            }]; 
+          },
+        },
+      },
+
+      _recomputePredicateProperties: function(splices) {
+        for (let i = 0, n = this.predicates.length; i < n; ++i) {
+          this.set(`predicates.${i}.isLast`, i === this.predicates.length - 1);
+          this.set(`predicates.${i}.isOnly`, this.predicates.length === 1);
+        }
+      },
+
+      _addCondition: function(event) {
+        this.fire('add-condition');
+        event.stopPropagation();
+      },
+
+      _removeCondition: function(event) {
+        this.fire('remove-condition');
+        event.stopPropagation();
+      },
+
+      _addPredicate: function(event) {
+        this.splice('predicates', event.model.index + 1, 0, {
+          predicate: Polyglot.Predicate.IS_EMPTY,
+          conjunction: Polyglot.Conjunction.AND,
+        });
+        event.stopPropagation();
+      },
+
+      _removePredicate: function(event) {
+        this.splice('predicates', event.model.index, 1);
+        event.stopPropagation();
+      },
+    });
+  </script>
+</dom-module>

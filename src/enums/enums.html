@@ -1,0 +1,46 @@
+<script>
+Polyglot = window.Polyglot || {};
+
+Polyglot.Polarity = {
+  MATCHES: 0,
+  DOES_NOT_MATCH: 1,
+};
+
+Polyglot.Group = {
+  ANY: 0,
+  ONSET: 1,
+  NUCLEUS: 2,
+  CODA: 3,
+};
+
+Polyglot.Predicate = {
+  IS_EMPTY: 0,
+  CONTAINS_ONE_SYMBOL: 1,
+  CONTAINS_MULTIPLE_SYMBOLS: 2,
+  CONTAINS_SPECIFIC_SYMBOL: 3,
+};
+
+Polyglot.Conjunction = {
+  AND: 0,
+  OR: 1,
+};
+
+Polyglot.RuleRequirement = {
+  MUST_BE_EMPTY: 0,
+  MUST_NOT_BE_EMPTY: 1,
+  MUST_CONTAIN: 2,
+  MUST_NOT_CONTAIN: 3,
+  MUST_BEGIN_WITH: 4,
+  MUST_NOT_BEGIN_WITH: 5,
+  MUST_END_WITH: 6,
+  MUST_NOT_END_WITH: 7,
+};
+
+Polyglot.RuleContext = {
+  MATCHED: 0,
+  ANY: 1,
+  ONSET: 2,
+  NUCLEUS: 3,
+  CODA: 4,
+};
+</script>

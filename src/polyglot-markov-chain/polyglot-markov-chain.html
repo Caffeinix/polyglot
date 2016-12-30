@@ -1,0 +1,76 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-markov-chain">
+  <template>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'polyglot-markov-chain',
+
+      properties: {
+      },
+
+      ready: function() {
+        this._model = new Map();
+        this._sums = new Map();
+      },
+
+      train: function(data) {
+        for (let example of data) {
+          let previousCharacter = '';
+          for (let character of example) {
+            if (!this._model.has(previousCharacter)) {
+              this._model.set(previousCharacter, new Map());
+              this._sums.set(previousCharacter, 0);
+            }
+            this._sums.set(previousCharacter, this._sums.get(previousCharacter) + 1);
+            let map = this._model.get(previousCharacter);
+            if (!map.has(character)) {
+              map.set(character, 0);
+            }
+            map.set(character, map.get(character) + 1);
+            previousCharacter = character;
+          }
+          const lastCharacter = example.charAt(example.length - 1);
+          if (!this._model.has(lastCharacter)) {
+            this._model.set(lastCharacter, new Map());
+            this._sums.set(lastCharacter, 0);
+          }
+
+          let map = this._model.get(lastCharacter);
+          if (!map.has('')) {
+            map.set('', 0);
+          }
+          map.set('', map.get('') + 1);
+        }
+      },
+
+      generate: function() {
+        if (this._model.size === 0) {
+          throw new Error(
+              'Generating from untrained Markov chain. Call train() first.');
+        }
+        let result = '';
+        let currentState = '';
+        do {
+          const map = this._model.get(currentState);
+          const sum = this._sums.get(currentState);
+          const rand = Math.floor(Math.random() * sum);
+          let total = 0;
+          for (let [key, value] of map) {
+            total += value;
+            if (rand < total) {  // <= ?
+              result += key;
+              currentState = key;
+              break;
+            }
+          }
+        } while (currentState !== '' && result.length < 50);
+        console.log(result);
+      },
+
+    });
+  </script>
+</dom-module>
