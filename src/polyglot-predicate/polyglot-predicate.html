@@ -1,5 +1,6 @@
 <link rel="import" href="../enums/enums.html">
 <link rel="import" href="../polyglot-add-remove-widget/polyglot-add-remove-widget.html">
+<link rel="import" href="../polyglot-styles/polyglot-styles.html">
 <link rel="import" href="../polyglot-symbol-validator/polyglot-symbol-validator.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -20,38 +21,21 @@
         @apply(--layout-horizontal);
       }
       paper-dropdown-menu {
-        --paper-input-container-input: {
-          @apply(--paper-font-body1);
-          color: var(--primary-text-color);
-        };
-        margin-top: 20px;
+        margin-top: 16px;
         margin-right: 8px;
       }
       paper-input {
-        --paper-input-container-input: {
-          @apply(--paper-font-body1);
-          color: var(--primary-text-color);
-        };
-        --paper-input-container-label: {
-          @apply(--paper-font-body1);
-        };        
         margin-right: 8px;
-      }
-      paper-item {
-        @apply(--paper-font-menu);
       }
       polyglot-add-remove-widget {
-        margin-top: 20px;
-      }
-      .inline-text {
-        margin-top: 28px;
-        margin-right: 8px;
+        margin-top: 16px;
       }
       #conjunctionDropdown {
         width: 80px;
       }
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <style include="polyglot-styles"></style>
     <paper-material class="layout horizontal" elevation="0">
       <paper-dropdown-menu label="Predicate" no-label-float>
         <paper-listbox class="dropdown-content" selected="{{predicate}}">

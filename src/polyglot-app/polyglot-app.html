@@ -1,19 +1,27 @@
-<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="../polyglot-markov-chain/polyglot-markov-chain.html">
 <link rel="import" href="../polyglot-rule-container/polyglot-rule-container.html">
+<link rel="import" href="../polyglot-styles/polyglot-styles.html">
+<link rel="import" href="../polyglot-wordlist/polyglot-wordlist.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="polyglot-app">
   <template>
     <style>
       :host {
-        display: block;
+        @apply(--layout-justified);
+        @apply(--layout-horizontal);
       }
     </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+    <style include="polyglot-styles"></style>
     <iron-meta key="terminalSymbols" value='["a", "c", "g", "t"]'></iron-meta>
     <iron-meta key="namedSymbols" value='["basepair"]'></iron-meta>
-    <polyglot-rule-container></polyglot-rule-container>
-    <polyglot-markov-chain id="markov"></polyglot-markov-chain>
+    <polyglot-markov-chain id="markov" hidden></polyglot-markov-chain>
+    <polyglot-wordlist class="flex"></polyglot-wordlist>
+    <polyglot-rule-container class="flex"></polyglot-rule-container>
   </template>
 
   <script>

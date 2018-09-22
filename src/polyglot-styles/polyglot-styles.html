@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-styles">
+  <template>
+    <style>
+      app-toolbar {
+        color: var(--primary-background-color);
+        background-color: var(--primary-color);
+      }
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };
+      }
+      paper-item {
+        @apply(--paper-font-menu);
+      }
+      paper-input {
+        --paper-input-container-input: {
+          @apply(--paper-font-body1);
+          color: var(--primary-text-color);
+        };        
+        --paper-input-container-label: {
+          @apply(--paper-font-body1);
+        };        
+      }
+      paper-material {
+        @apply(--paper-font-body1);    
+        color: var(--primary-text-color);
+      }
+    </style>
+  </template>
+</dom-module>

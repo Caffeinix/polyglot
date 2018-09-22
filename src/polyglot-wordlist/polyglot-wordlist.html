@@ -1,0 +1,84 @@
+<link rel="import" href="../polyglot-styles/polyglot-styles.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/effects/waterfall.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="polyglot-wordlist">
+  <template>
+    <style>
+      :host {
+        @apply(--layout);
+        @apply(--layout-justified);
+        @apply(--paper-font-body1);
+        position: relative;
+        color: var(--primary-text-color);
+      }
+      #content {
+        padding: 24px;
+      }
+      #textAreaContainer {
+        margin: 16px 0;
+        overflow: auto;
+      }
+      #textArea {
+        @apply(--paper-font-body2);
+        margin: 16px 0;
+        border: none;
+        outline: none;
+        resize: none;
+        line-height: 24px;
+        background: linear-gradient(
+            to bottom, 
+            rgba(0,0,0,0) 0%,
+            rgba(0,0,0,0) 96%,
+            rgba(0,0,0,0.25) 100%) repeat;
+        background-size: 1px 24px;
+        background-attachment: local;
+      }
+      paper-button {
+        @apply(--paper-font-button);
+        font-size: 13px;
+        margin-left: 8px;
+        height: 32px;
+      }
+      #exportButton {
+        color: var(--primary-background-color);
+        background-color: var(--primary-color);
+      }
+    </style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-reverse"></style>
+    <style include="polyglot-styles"></style>
+
+    <app-header-layout fullbleed has-scrolling-region style="width: 100%; height: 100%;">
+      <app-header fixed condenses effects="waterfall">
+        <app-toolbar>
+          <div main-title>Wordlist</div>
+        </app-toolbar>
+      </app-header>
+      <paper-material id="content" elevation="0" class="layout vertical flex">
+        <div>Type or paste one word per line. Anything after the first word on each line will be ignored.</div>
+        <div class="layout vertical flex" id="textAreaContainer">
+          <div id="textArea" contenteditable="true"></div>
+        </div>
+        <paper-material elevation="0" class="layout horizontal-reverse">
+          <paper-button id="exportButton" raised>Export&hellip;</paper-button>
+          <paper-button id="importButton" raised>Import&hellip;</paper-button>
+        </paper-material>
+      </paper-material>
+    </app-header-layout>
+  </template>
+  <script>
+    Polymer({
+
+      is: 'polyglot-wordlist',
+
+      properties: {
+      },
+    });
+  </script>
+</dom-module>

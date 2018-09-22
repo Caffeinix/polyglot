@@ -1,5 +1,6 @@
 <link rel="import" href="../polyglot-condition/polyglot-condition.html">
 <link rel="import" href="../polyglot-rule/polyglot-rule.html">
+<link rel="import" href="../polyglot-styles/polyglot-styles.html">
 <link rel="import" href="../enums/enums.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
@@ -20,6 +21,7 @@
         height: 32px;
       }
     </style>
+    <style include="polyglot-styles"></style>
     <div 
         class="layout horizontal" 
         hidden$="[[_computeHasConditions(ruleset.conditions.splices)]]">

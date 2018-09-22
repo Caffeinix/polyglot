@@ -1,6 +1,7 @@
 <link rel="import" href="../enums/enums.html">
 <link rel="import" href="../polyglot-add-remove-widget/polyglot-add-remove-widget.html">
 <link rel="import" href="../polyglot-predicate/polyglot-predicate.html">
+<link rel="import" href="../polyglot-styles/polyglot-styles.html">
 <link rel="import" href="../polyglot-symbol-validator/polyglot-symbol-validator.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -16,8 +17,6 @@
   <template>
     <style>
       :host {
-        color: var(--primary-text-color);
-        @apply(--paper-font-body1);
         @apply(--layout-vertical);
       }
       paper-material {
@@ -26,22 +25,16 @@
       #predicates {
         padding: 0 24px 16px;
       }
-      paper-item {
-        @apply(--paper-font-menu);
-      }
       .inline-text {
         margin-top: 9px;
         margin-right: 8px;
       }
       paper-dropdown-menu {
-        --paper-input-container-input: {
-          @apply(--paper-font-body1);
-          color: var(--primary-text-color);
-        };
         margin-right: 8px;
       }
     </style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <style include="polyglot-styles"></style>
     <paper-material class="layout horizontal" elevation="0">
       <span class="inline-text">If</span>
       <paper-dropdown-menu label="Group" no-label-float>
